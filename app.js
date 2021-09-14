@@ -10,6 +10,7 @@ const aboutContent = "Hac habitasse platea dictumst vestibulum rhoncus est pelle
 const contactContent = "Scelerisque eleifend donec pretium vulputate sapien. Rhoncus urna neque viverra justo nec ultrices. Arcu dui vivamus arcu felis bibendum. Consectetur adipiscing elit duis tristique. Risus viverra adipiscing at in tellus integer feugiat. Sapien nec sagittis aliquam malesuada bibendum arcu vitae. Consequat interdum varius sit amet mattis. Iaculis nunc sed augue lacus. Interdum posuere lorem ipsum dolor sit amet consectetur adipiscing elit. Pulvinar elementum integer enim neque. Ultrices gravida dictum fusce ut placerat orci nulla. Mauris in aliquam sem fringilla ut morbi tincidunt. Tortor posuere ac ut consequat semper viverra nam libero.";
 
 const posts = [];
+const lowerPosts = [];
 
 const app = express();
 
@@ -19,6 +20,9 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
 app.get("/", function(req,res) {
+  posts.forEach(function(post){
+    lowerPosts.push(lodash.lowerCase(post));
+  })  
   res.render("home", {homeStartingContent: homeStartingContent, posts: posts});
 });
 
@@ -45,7 +49,7 @@ app.get("/posts/:postsTitle", function(req,res) {
   const titleName = req.params.postsTitle;
   posts.forEach(function(post){
     if (lodash.lowerCase(titleName) === lodash.lowerCase(post.title)) {
-      console.log("success");
+      res.render("post", {postName: post.title, postContent: post.content})
     } else {
       console.log("not a match");
     }
